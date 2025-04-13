@@ -1,3 +1,8 @@
+const { OpenAI } = require("openai");
+require("dotenv").config();
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -10,10 +15,33 @@ const PORT = process.env.PORT || 3000;
 
 let prompt = "";
 
-function updatePrompt() {
-  // call gpt to update the prompt variable with a new prompt
+async function updatePrompt() {
+  try {
+    const response = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a creative art therapist who gives imaginative drawing prompts that help people express " +
+              "their emotions and relieve stress.",
+        },
+        {
+          role: "user",
+          content: "Give me 3 unique, daily drawing prompts that could be used in art therapy. " +
+              "Format them as a numbered list.",
+        },
+      ],
+      model: "gpt-4",
+    });
+
+    prompt = response.choices[0].message.content.trim();
+    console.log("🆕 New prompts generated!");
+  } catch (err) {
+    console.error("Error fetching prompt:", err);
+  }
 }
 
+
+updatePrompt()
 app.use(cors());
 app.use(express.json());
 
