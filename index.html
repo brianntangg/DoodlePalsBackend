@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Art Prompt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        .prompt-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .prompt-text {
+            font-size: 24px;
+            color: #333;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-container">
+        <h1>Today's Art Prompt</h1>
+        <p class="prompt-text" id="promptText">Loading...</p>
+        <button onclick="getNextPrompt()">Get Next Prompt</button>
+    </div>
+
+    <script>
+        // Function to fetch and display the current prompt
+        async function getCurrentPrompt() {
+            try {
+                const response = await fetch('http://localhost:3000/daily-prompt');
+                const data = await response.json();
+                document.getElementById('promptText').textContent = data.prompt;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('promptText').textContent = 'Error loading prompt';
+            }
+        }
+
+        // Function to get the next prompt
+        async function getNextPrompt() {
+            try {
+                const response = await fetch('http://localhost:3000/next-prompt', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                document.getElementById('promptText').textContent = data.prompt;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('promptText').textContent = 'Error loading next prompt';
+            }
+        }
+
+        // Load the initial prompt when the page loads
+        getCurrentPrompt();
+    </script>
+</body>
+</html> 
