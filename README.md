@@ -72,8 +72,6 @@ The server-side component of DoodlePals that handles data persistence, authentic
 - Initialize required collections:
   - users
   - doodles
-  - comments
-  - friend_requests
 
 ## Performance Considerations
 - Doodle data is stored as optimized SVG or compressed bitmap
